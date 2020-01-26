@@ -15,6 +15,7 @@ add_executable(P1
         Defs.h
         File.cc
         File.h
+        lex.yy.c
         main.cc
         ParseTree.h
         Record.cc
@@ -23,4 +24,6 @@ add_executable(P1
         Schema.h
         test.h
         TwoWayList.cc
-        TwoWayList.h)
+        TwoWayList.h
+        y.tab.o
+        )

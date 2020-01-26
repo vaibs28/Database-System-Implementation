@@ -23,8 +23,8 @@ int main () {
     //Schema lineitem ("catalog", "lineitem");
 
     // grow the CNF expression from the parse tree
-    //CNF myComparison;
-    //Record literal;
+    CNF myComparison;
+    Record literal;
 	//myComparison.GrowFromParseTree (final, &lineitem, literal);
 
     // print out the comparison to the screen
@@ -32,9 +32,9 @@ int main () {
 
     // now open up the text file and start procesing it
 
-    FILE *tableFile = fopen ("/Users/vaibhav/Documents/UF CISE/DBI/P1/table/lineitem.tbl", "r");
+    //FILE *tableFile = fopen ("table/lineitem.tbl", "r");
     Record temp;
-    Schema mySchema ("catalog", "lineitem");
+    Schema mySchema ("/Users/vaibhav/Documents/UF CISE/DBI/P1/catalog", "lineitem");
     DBFile dbf;
 
     //File file;
@@ -43,10 +43,21 @@ int main () {
 
 
 
-    dbf.Load(mySchema, "/Users/vaibhav/Documents/UF CISE/DBI/P1/table/lineitem.tbl");
+    dbf.Load(mySchema, "/Users/vaibhav/Documents/UF_CISE/DBI/P1/table/lineitem.tbl");
     //temp.Print(&mySchema);
 
-
+    //Schema mySchema ("/Users/vaibhav/Documents/UF CISE/DBI/P1/catalog", "lineitem");
+    Page readFromPage;
+    File file;
+    file.GetPage(&readFromPage,0);
+    int count = readFromPage.getRecordCount();
+    int start = 0;
+    while(start<=count){
+        Record readFromRecord;
+        readFromPage.GetFirst(&readFromRecord);
+        readFromRecord.Print(&mySchema);
+        count--;
+    }
 
     //char *bits = literal.GetBits ();
     //cout << " numbytes in rec " << ((int *) bits)[0] << endl;
@@ -63,7 +74,7 @@ int main () {
         }
         if (comp.Compare (&temp, &literal, &myComparison))
                     temp.Print (&mySchema);
-        } */
+        }*/
 
 }
 

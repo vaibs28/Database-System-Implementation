@@ -7,6 +7,7 @@
 #include "DBFile.h"
 #include "Defs.h"
 #include <string.h>
+#include <iostream>
 
 // stub file .. replace it with your own DBFile.cc
 
@@ -14,41 +15,44 @@
 
 //constructor initializing the required objects
 DBFile::DBFile() {
-
-    this->file = new File();
-    this->readPage = new Page();
-    this->writePage = new Page();
-    this->current = new Record();
-
 }
 
 //destructor
 DBFile::~DBFile() {
-    delete file;
-    delete readPage;
-    delete writePage;
-    delete current;
 }
 
 //loads the DBFile instance from a textfile
 void DBFile::Load(Schema &f_schema, char *loadpath) {
-
-    FILE* tableFile = fopen (loadpath,"r");
-    Record temp;
-
-    while(temp.SuckNextRecord(&f_schema,tableFile)!=0)
-        this->Add(temp);
-
-    fclose(tableFile);
+    FILE *fd = fopen(loadpath, "r");
+    Record record;
+    Page page;
+    File file;
+    int pageOffset = 0;
+    while (record.SuckNextRecord(&f_schema, fd)) {
+        //append the record to page
+        if (page.Append(&record) == 0) {
+            // cannot fit the new record, so add the new page, clear the records and append the record
+            file.AddPage(&page, pageOffset++);
+            page.EmptyItOut();
+            page.Append(&record);
+        }
+    }
+    file.AddPage(&page, pageOffset); //add the page into the file;
+    cout << "Added to file" << endl;
+    fclose(fd); //close the opened file
+    return;
 }
 
 void DBFile::Add(Record &addMe) {
-    if(!writePage->Append(&addMe)){
-        file->AddPage(writePage,0);
+    //append the record to the end of the page.
+    if (writePage->Append(&addMe) == 0) {
+        // if the size is greater than the available page size then add a new page and clear it
+        file->AddPage(writePage, 0);
         writePage->EmptyItOut();
         writePage->Append(&addMe);
     }
-    file->AddPage(writePage,0);
+    //add the pae to the file
+    file->AddPage(writePage, 0);
 }
 
 void DBFile::MoveFirst() {

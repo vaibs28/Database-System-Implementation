@@ -25,6 +25,9 @@ Page::~Page() {
     delete myRecs;
 }
 
+int Page::getRecordCount() {
+    return numRecs;
+}
 
 void Page::EmptyItOut() {
 
@@ -64,6 +67,8 @@ int Page::GetFirst(Record *firstOne) {
 
 int Page::Append(Record *addMe) {
     char *b = addMe->GetBits();
+    //Schema mySchema ("/Users/vaibhav/Documents/UF CISE/DBI/P1/catalog", "lineitem");
+    //addMe->Print(&mySchema);
 
     // first see if we can fit the record
     if (curSizeInBytes + ((int *) b)[0] > PAGE_SIZE) {

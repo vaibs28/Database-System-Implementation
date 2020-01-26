@@ -109,9 +109,22 @@ CMakeFiles/P1.dir/File.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/P1.dir/File.cc.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/vaibhav/Documents/UF CISE/DBI/P1/File.cc" -o CMakeFiles/P1.dir/File.cc.s
 
+CMakeFiles/P1.dir/lex.yy.c.o: CMakeFiles/P1.dir/flags.make
+CMakeFiles/P1.dir/lex.yy.c.o: ../lex.yy.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/P1.dir/lex.yy.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/P1.dir/lex.yy.c.o   -c "/Users/vaibhav/Documents/UF CISE/DBI/P1/lex.yy.c"
+
+CMakeFiles/P1.dir/lex.yy.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/P1.dir/lex.yy.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/vaibhav/Documents/UF CISE/DBI/P1/lex.yy.c" > CMakeFiles/P1.dir/lex.yy.c.i
+
+CMakeFiles/P1.dir/lex.yy.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/P1.dir/lex.yy.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/vaibhav/Documents/UF CISE/DBI/P1/lex.yy.c" -o CMakeFiles/P1.dir/lex.yy.c.s
+
 CMakeFiles/P1.dir/main.cc.o: CMakeFiles/P1.dir/flags.make
 CMakeFiles/P1.dir/main.cc.o: ../main.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/P1.dir/main.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/P1.dir/main.cc.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/P1.dir/main.cc.o -c "/Users/vaibhav/Documents/UF CISE/DBI/P1/main.cc"
 
 CMakeFiles/P1.dir/main.cc.i: cmake_force
@@ -124,7 +137,7 @@ CMakeFiles/P1.dir/main.cc.s: cmake_force
 
 CMakeFiles/P1.dir/Record.cc.o: CMakeFiles/P1.dir/flags.make
 CMakeFiles/P1.dir/Record.cc.o: ../Record.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/P1.dir/Record.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/P1.dir/Record.cc.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/P1.dir/Record.cc.o -c "/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.cc"
 
 CMakeFiles/P1.dir/Record.cc.i: cmake_force
@@ -137,7 +150,7 @@ CMakeFiles/P1.dir/Record.cc.s: cmake_force
 
 CMakeFiles/P1.dir/Schema.cc.o: CMakeFiles/P1.dir/flags.make
 CMakeFiles/P1.dir/Schema.cc.o: ../Schema.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/P1.dir/Schema.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/P1.dir/Schema.cc.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/P1.dir/Schema.cc.o -c "/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.cc"
 
 CMakeFiles/P1.dir/Schema.cc.i: cmake_force
@@ -150,7 +163,7 @@ CMakeFiles/P1.dir/Schema.cc.s: cmake_force
 
 CMakeFiles/P1.dir/TwoWayList.cc.o: CMakeFiles/P1.dir/flags.make
 CMakeFiles/P1.dir/TwoWayList.cc.o: ../TwoWayList.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/P1.dir/TwoWayList.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/P1.dir/TwoWayList.cc.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/P1.dir/TwoWayList.cc.o -c "/Users/vaibhav/Documents/UF CISE/DBI/P1/TwoWayList.cc"
 
 CMakeFiles/P1.dir/TwoWayList.cc.i: cmake_force
@@ -167,25 +180,29 @@ P1_OBJECTS = \
 "CMakeFiles/P1.dir/ComparisonEngine.cc.o" \
 "CMakeFiles/P1.dir/DBFile.cc.o" \
 "CMakeFiles/P1.dir/File.cc.o" \
+"CMakeFiles/P1.dir/lex.yy.c.o" \
 "CMakeFiles/P1.dir/main.cc.o" \
 "CMakeFiles/P1.dir/Record.cc.o" \
 "CMakeFiles/P1.dir/Schema.cc.o" \
 "CMakeFiles/P1.dir/TwoWayList.cc.o"
 
 # External object files for target P1
-P1_EXTERNAL_OBJECTS =
+P1_EXTERNAL_OBJECTS = \
+"/Users/vaibhav/Documents/UF CISE/DBI/P1/y.tab.o"
 
 P1: CMakeFiles/P1.dir/Comparison.cc.o
 P1: CMakeFiles/P1.dir/ComparisonEngine.cc.o
 P1: CMakeFiles/P1.dir/DBFile.cc.o
 P1: CMakeFiles/P1.dir/File.cc.o
+P1: CMakeFiles/P1.dir/lex.yy.c.o
 P1: CMakeFiles/P1.dir/main.cc.o
 P1: CMakeFiles/P1.dir/Record.cc.o
 P1: CMakeFiles/P1.dir/Schema.cc.o
 P1: CMakeFiles/P1.dir/TwoWayList.cc.o
+P1: ../y.tab.o
 P1: CMakeFiles/P1.dir/build.make
 P1: CMakeFiles/P1.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable P1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable P1"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/P1.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

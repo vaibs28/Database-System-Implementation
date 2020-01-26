@@ -312,6 +312,33 @@ TwoWayList.cc.s:
 	$(MAKE) -f CMakeFiles/P1.dir/build.make CMakeFiles/P1.dir/TwoWayList.cc.s
 .PHONY : TwoWayList.cc.s
 
+lex.yy.o: lex.yy.c.o
+
+.PHONY : lex.yy.o
+
+# target to build an object file
+lex.yy.c.o:
+	$(MAKE) -f CMakeFiles/P1.dir/build.make CMakeFiles/P1.dir/lex.yy.c.o
+.PHONY : lex.yy.c.o
+
+lex.yy.i: lex.yy.c.i
+
+.PHONY : lex.yy.i
+
+# target to preprocess a source file
+lex.yy.c.i:
+	$(MAKE) -f CMakeFiles/P1.dir/build.make CMakeFiles/P1.dir/lex.yy.c.i
+.PHONY : lex.yy.c.i
+
+lex.yy.s: lex.yy.c.s
+
+.PHONY : lex.yy.s
+
+# target to generate assembly for a file
+lex.yy.c.s:
+	$(MAKE) -f CMakeFiles/P1.dir/build.make CMakeFiles/P1.dir/lex.yy.c.s
+.PHONY : lex.yy.c.s
+
 main.o: main.cc.o
 
 .PHONY : main.o
@@ -369,6 +396,9 @@ help:
 	@echo "... TwoWayList.o"
 	@echo "... TwoWayList.i"
 	@echo "... TwoWayList.s"
+	@echo "... lex.yy.o"
+	@echo "... lex.yy.i"
+	@echo "... lex.yy.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -5,7 +5,7 @@ test_out_tag = -ll
 
 ifdef linux
 tag = -n
-test_out_tag = -lfl
+test_out_tag = -ll
 endif
 
 test.out: Record.o Comparison.o ComparisonEngine.o Schema.o File.o DBFile.o y.tab.o lex.yy.o test.o
@@ -13,19 +13,19 @@ test.out: Record.o Comparison.o ComparisonEngine.o Schema.o File.o DBFile.o y.ta
 
 main: Record.o Comparison.o ComparisonEngine.o Schema.o File.o DBFile.o y.tab.o lex.yy.o main.o
 	$(CC) -o main Record.o Comparison.o ComparisonEngine.o Schema.o File.o DBFile.o y.tab.o lex.yy.o main.o $(test_out_tag)
-	
+
 test.o: test.cc
 	$(CC) -g -c test.cc
 
 main.o: main.cc
 	$(CC) -g -c main.cc
-	
+
 Comparison.o: Comparison.cc
 	$(CC) -g -c Comparison.cc
-	
+
 ComparisonEngine.o: ComparisonEngine.cc
 	$(CC) -g -c ComparisonEngine.cc
-	
+
 DBFile.o: DBFile.cc
 	$(CC) -g -c DBFile.cc
 
@@ -37,19 +37,16 @@ Record.o: Record.cc
 
 Schema.o: Schema.cc
 	$(CC) -g -c Schema.cc
-	
+
 y.tab.o: Parser.y
 	yacc -d Parser.y
-	sed $(tag) -e "s/  __attribute__ ((__unused__))$$/# ifndef __cplusplus\n  __attribute__ ((__unused__));\n# endif/" y.tab.cc
-	g++ -c y.tab.cc
+	sed $(tag) -e "s/  __attribute__ ((__unused__))$$/# ifndef __cplusplus\n  __attribute__ ((__unused__));\n# endif/" y.tab.c
+	g++ -c y.tab.c
 
 lex.yy.o: Lexer.l
 	lex  Lexer.l
 	gcc  -c lex.yy.c
 
-clean: 
+clean:
 	rm -f *.o
 	rm -f *.out
-	rm -f y.tab.cc
-	rm -f lex.yy.c
-	rm -f y.tab.h

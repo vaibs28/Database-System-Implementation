@@ -132,10 +132,16 @@
 		<Unit filename="/Users/vaibhav/Documents/UF CISE/DBI/P1/TwoWayList.h">
 			<Option target="P1"/>
 		</Unit>
+		<Unit filename="/Users/vaibhav/Documents/UF CISE/DBI/P1/lex.yy.c">
+			<Option target="P1"/>
+		</Unit>
 		<Unit filename="/Users/vaibhav/Documents/UF CISE/DBI/P1/main.cc">
 			<Option target="P1"/>
 		</Unit>
 		<Unit filename="/Users/vaibhav/Documents/UF CISE/DBI/P1/test.h">
+			<Option target="P1"/>
+		</Unit>
+		<Unit filename="/Users/vaibhav/Documents/UF CISE/DBI/P1/y.tab.o">
 			<Option target="P1"/>
 		</Unit>
 		<Unit filename="/Users/vaibhav/Documents/UF CISE/DBI/P1/CMakeLists.txt">
