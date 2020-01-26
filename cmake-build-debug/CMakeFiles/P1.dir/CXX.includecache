@@ -1,0 +1,122 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+Record.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+Schema.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+File.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/File.h
+Comparison.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+ComparisonEngine.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+Record.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+Schema.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+File.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/File.h
+Comparison.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+ComparisonEngine.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/DBFile.cc
+TwoWayList.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/TwoWayList.h
+Record.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+Schema.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+File.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/File.h
+Comparison.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+ComparisonEngine.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+DBFile.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/DBFile.h
+Defs.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Defs.h
+string.h
+-
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/DBFile.h
+TwoWayList.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/TwoWayList.h
+Record.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+Schema.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+File.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/File.h
+Comparison.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+ComparisonEngine.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Defs.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/File.h
+TwoWayList.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/TwoWayList.h
+Record.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+Schema.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+Comparison.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+ComparisonEngine.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ParseTree.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+stdio.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+Defs.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Defs.h
+ParseTree.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ParseTree.h
+Record.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+Schema.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+File.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/File.h
+Comparison.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+ComparisonEngine.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+stdio.h
+-
+Record.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Record.h
+Schema.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Schema.h
+File.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/File.h
+Comparison.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/Comparison.h
+ComparisonEngine.h
+/Users/vaibhav/Documents/UF CISE/DBI/P1/ComparisonEngine.h
+
+/Users/vaibhav/Documents/UF CISE/DBI/P1/TwoWayList.h
+
