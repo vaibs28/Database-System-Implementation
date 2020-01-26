@@ -20,12 +20,12 @@ int main () {
 	}*/
 
     // suck up the schema from the file
-    Schema lineitem ("catalog", "lineitem");
+    //Schema lineitem ("catalog", "lineitem");
 
     // grow the CNF expression from the parse tree
-    CNF myComparison;
-    Record literal;
-	myComparison.GrowFromParseTree (final, &lineitem, literal);
+    //CNF myComparison;
+    //Record literal;
+	//myComparison.GrowFromParseTree (final, &lineitem, literal);
 
     // print out the comparison to the screen
 	//myComparison.Print ();
@@ -35,7 +35,7 @@ int main () {
     FILE *tableFile = fopen ("/Users/vaibhav/Documents/UF CISE/DBI/P1/table/lineitem.tbl", "r");
     Record temp;
     Schema mySchema ("catalog", "lineitem");
-    //DBFile dbf;
+    DBFile dbf;
 
     //File file;
     //Page page;
@@ -43,7 +43,7 @@ int main () {
 
 
 
-    //dbf.Load(mySchema, "/Users/vaibhav/Documents/UF CISE/DBI/P1/table/lineitem.tbl");
+    dbf.Load(mySchema, "/Users/vaibhav/Documents/UF CISE/DBI/P1/table/lineitem.tbl");
     //temp.Print(&mySchema);
 
 
@@ -54,7 +54,7 @@ int main () {
 
     // read in all of the records from the text file and see if they match
     // the CNF expression that was typed in
-    int counter = 0;
+    /*int counter = 0;
     ComparisonEngine comp;
         while (temp.SuckNextRecord (&mySchema, tableFile) == 1) {
         counter++;
@@ -63,7 +63,7 @@ int main () {
         }
         if (comp.Compare (&temp, &literal, &myComparison))
                     temp.Print (&mySchema);
-        }
+        } */
 
 }
 
