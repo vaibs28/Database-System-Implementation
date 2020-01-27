@@ -26,18 +26,20 @@ void DBFile::Load(Schema &f_schema, char *loadpath) {
     FILE *fd = fopen(loadpath, "r");
     Record record;
     Page page;
-    File file;
+    File file1;
     int pageOffset = 0;
     while (record.SuckNextRecord(&f_schema, fd)) {
         //append the record to page
+        current = &record;
         if (page.Append(&record) == 0) {
             // cannot fit the new record, so add the new page, clear the records and append the record
-            file.AddPage(&page, pageOffset++);
+            file1.AddPage(&page, pageOffset);
             page.EmptyItOut();
             page.Append(&record);
         }
     }
-    file.AddPage(&page, pageOffset); //add the page into the file;
+    file1.AddPage(&page, pageOffset); //add the page into the file;
+    file = &file1;
     cout << "Added to file" << endl;
     fclose(fd); //close the opened file
     return;
@@ -45,14 +47,18 @@ void DBFile::Load(Schema &f_schema, char *loadpath) {
 
 void DBFile::Add(Record &addMe) {
     //append the record to the end of the page.
-    if (writePage->Append(&addMe) == 0) {
+    Page page;
+    File file;
+    file.GetPage(&page,0);
+    int pageOffset = 0;
+    if (page.Append(&addMe) == 0) {
         // if the size is greater than the available page size then add a new page and clear it
-        file->AddPage(writePage, 0);
-        writePage->EmptyItOut();
-        writePage->Append(&addMe);
+        //file.AddPage(page, pageOffset++);
+        page.EmptyItOut();
+        page.Append(&addMe);
     }
-    //add the pae to the file
-    file->AddPage(writePage, 0);
+    //add the page to the file
+    file.AddPage(&page, pageOffset);
 }
 
 void DBFile::MoveFirst() {
@@ -77,3 +83,5 @@ int DBFile::GetNext(Record &fetchme) {
 
 int DBFile::GetNext(Record &fetchme, CNF &cnf, Record &literal) {
 }
+
+

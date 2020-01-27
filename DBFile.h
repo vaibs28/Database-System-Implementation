@@ -14,16 +14,9 @@ typedef enum {heap, sorted, tree} fType;
 
 class DBFile {
 
-	char file_path[20];
 	Record* current;
-	Page* readPage;
-	Page* writePage;
 	File* file;
-	off_t pageIndex;
-	off_t writeIndex;
-	char* name;
-	int writeIsDirty;
-	int endOfFile;
+    off_t pageOffset;
 
 public:
 	DBFile ();
@@ -39,6 +32,11 @@ public:
 	void Add (Record &addme);
 	int GetNext (Record &fetchme);
 	int GetNext (Record &fetchme, CNF &cnf, Record &literal);
+
+    File* getFile(){
+        return file;
+    }
+
 
 };
 #endif
