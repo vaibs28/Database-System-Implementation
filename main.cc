@@ -14,19 +14,22 @@ DBFile dbf;
 void printRecordsFromPages(){
     Schema mySchema ("/Users/vaibhav/Documents/UF CISE/DBI/P1/catalog", "lineitem");
     Page readFromPage;
-    //DBFile dbf;
     File file ;
-    File* f = dbf.getFile();
-    file.GetPage(&readFromPage,1);
-    int count = readFromPage.getRecordCount();
-    int start = 0;
-    while(start<=count-1){
-        Record readFromRecord;
-        readFromPage.GetFirst(&readFromRecord);
-        readFromRecord.Print(&mySchema);
-        count--;
+    //File file = dbf.getFile();
+    off_t  numPages = dbf.getPageOffset();
+    for(int i=0;i<numPages;i++){
+        file.GetPage(&readFromPage, i);
+        int count = readFromPage.getRecordCount();
+        int start = 0;
+        while(start<=count-1){
+            Record readFromRecord;
+            readFromPage.GetFirst(&readFromRecord);
+            readFromRecord.Print(&mySchema);
+            count--;
+        }
     }
-    file.Close();
+
+    //file.Close();
 }
 
 int main () {
@@ -51,7 +54,7 @@ int main () {
 
     // now open up the text file and start procesing it
 
-    FILE *tableFile = fopen ("/Users/vaibhav/Documents/UF_CISE/DBI/P1/table/lineitem.tbl", "r");
+    FILE *tableFile = fopen ("/Users/vaibhav/Documents/UF CISE/DBI/P1/table/lineitem.tbl", "r");
     Record temp;
     Schema mySchema ("/Users/vaibhav/Documents/UF CISE/DBI/P1/catalog", "lineitem");
 
@@ -62,7 +65,7 @@ int main () {
 
 
 
-    dbf.Load(mySchema, "/Users/vaibhav/Documents/UF_CISE/DBI/P1/table/lineitem.tbl");
+    dbf.Load(mySchema, "/Users/vaibhav/Documents/UF CISE/DBI/P1/table/lineitem.tbl");
     printRecordsFromPages();
 
     //Schema mySchema ("/Users/vaibhav/Documents/UF CISE/DBI/P1/catalog", "lineitem");
@@ -71,7 +74,7 @@ int main () {
     //test for adding records
 
     while (temp.SuckNextRecord (&mySchema, tableFile) == 1){
-        //dbf.Add(temp);
+        dbf.Add(temp);
     }
 
     //print the added records
