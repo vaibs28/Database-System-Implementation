@@ -15,15 +15,16 @@ typedef enum {heap, sorted, tree} fType;
 class DBFile {
 
 	Record* current;
-	File* file;
+	File file;
+	Page page;
     off_t pageOffset;
 
 public:
 	DBFile ();
 	~DBFile();
 
-	int Create (char *fpath, fType file_type, void *startup);
-	int Open (char *fpath);
+	int Create (const char *fpath, fType file_type, void *startup);
+	int Open (const char *fpath);
 	int Close ();
 
 	void Load (Schema &myschema, char *loadpath);
@@ -33,10 +34,16 @@ public:
 	int GetNext (Record &fetchme);
 	int GetNext (Record &fetchme, CNF &cnf, Record &literal);
 
-    File* getFile(){
+    File getFile(){
         return file;
     }
 
+    off_t  getPageOffset(){
+        return pageOffset;
+    }
 
+    Page getPage(){
+        return page;
+    }
 };
 #endif
