@@ -92,18 +92,15 @@ int DBFile::GetNext(Record &fetchme) {
 }
 
 int DBFile::GetNext(Record &fetchme, CNF &cnf, Record &literal) {
-    int find_flag = 0;
+    int flag = 0;
     ComparisonEngine comp;
     while (GetNext(fetchme)) {
         if (comp.Compare(&fetchme, &literal, &cnf)) {
-            //fetchme.Print(&mySchema);
-            find_flag = 1;
+            flag = 1;
             break;
         }
     }
-
-    if (find_flag == 0) {
-        //no records found
+    if (flag == 0) {
         return 0;
     }
     return 1;
