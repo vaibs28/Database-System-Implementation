@@ -15,6 +15,7 @@
 
 //constructor initializing the required objects
 DBFile::DBFile() {
+    pageOffset = 0;
 }
 
 //destructor
@@ -25,64 +26,87 @@ DBFile::~DBFile() {
 void DBFile::Load(Schema &f_schema, char *loadpath) {
     FILE *fd = fopen(loadpath, "r");
     Record record;
-    Page page;
-    File file1;
-
+    int numRecords = 0;
     while (record.SuckNextRecord(&f_schema, fd)) {
         //append the record to page
-        //recordCount++;
         current = &record; //store the address in the current pointer of DBFile
+        numRecords++;
         if (page.Append(&record) == 0) {
             // cannot fit the new record, so add the existing page, clear the page and append the record
-            file1.AddPage(&page, pageOffset++);
+            file.AddPage(&page, pageOffset++);
             page.EmptyItOut();
             page.Append(&record);
         }
     }
-    file1.AddPage(&page, pageOffset++);
-    file = &file1;  // store in the file pointer in DBFile
-    cout << "Added to file" << endl;
-    //cout<<"number of records="<<recordCount<<endl;
+    file.AddPage(&page, pageOffset++);
+    cout << numRecords << " records Added to file" << endl;
     fclose(fd); //close the opened file
     return;
 }
 
 void DBFile::Add(Record &addMe) {
     //append the record to the end of the page.
-    Page page;
-    File file;
-    file.GetPage(&page,pageOffset);
-    if (page.Append(&addMe) == 0) {
-        // if the size is greater than the available page size then add a new page and clear it
-        file.AddPage(&page, pageOffset++);
+    if (!page.Append(&addMe)) {
         page.EmptyItOut();
         page.Append(&addMe);
     }
-    //add the page to the file
-    file.AddPage(&page, pageOffset);
+    return;
 }
 
 void DBFile::MoveFirst() {
-
+    page.EmptyItOut();
+    //move to the first one
+    pageOffset = 0;
 }
 
-int DBFile::Create(char *f_path, fType f_type, void *startup) {
-
+int DBFile::Create(const char *f_path, fType f_type, void *startup) {
+    if (f_type == heap) {
+        file.Open(0, f_path);
+        cout << "file created successfully";
+        return 1;
+    }
+    return 0;
 }
 
 
-int DBFile::Open(char *f_path) {
+int DBFile::Open(const char *f_path) {
+    file.Open(1, f_path);
+    return 1;
 }
 
 
 int DBFile::Close() {
+    pageOffset = 0;
+    return file.Close();
 }
 
 
 int DBFile::GetNext(Record &fetchme) {
+    if (!page.GetFirst(&fetchme)) {
+        if (pageOffset + 1 >= file.GetLength())
+            return 0;
+        file.GetPage(&page, pageOffset++);
+        page.GetFirst(&fetchme);
+    }
+    return 1;
 }
 
 int DBFile::GetNext(Record &fetchme, CNF &cnf, Record &literal) {
+    int find_flag = 0;
+    ComparisonEngine comp;
+    while (GetNext(fetchme)) {
+        if (comp.Compare(&fetchme, &literal, &cnf)) {
+            //fetchme.Print(&mySchema);
+            find_flag = 1;
+            break;
+        }
+    }
+
+    if (find_flag == 0) {
+        //no records found
+        return 0;
+    }
+    return 1;
 }
 
 
