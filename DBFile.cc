@@ -6,16 +6,14 @@
 #include "ComparisonEngine.h"
 #include "DBFile.h"
 #include "Defs.h"
-#include <string.h>
+#include "SortedDBFile.h"
+#include "HeapDBFile.h"
 #include <iostream>
 
-// stub file .. replace it with your own DBFile.cc
-
-//TODO:optimise for branch misses
 
 //constructor initializing the required objects
 DBFile::DBFile() {
-    pageOffset = 0;
+
 }
 
 //destructor
@@ -23,87 +21,45 @@ DBFile::~DBFile() {
 }
 
 //loads the DBFile instance from a textfile
-void DBFile::Load(Schema &f_schema, char *loadpath) {
-    FILE *fd = fopen(loadpath, "r");
-    Record record;
-    int numRecords = 0;
-    while (record.SuckNextRecord(&f_schema, fd)) {
-        //append the record to page
-        current = &record; //store the address in the current pointer of DBFile
-        numRecords++;
-        if (page.Append(&record) == 0) {
-            // cannot fit the new record, so add the existing page, clear the page and append the record
-            file.AddPage(&page, pageOffset++);
-            page.EmptyItOut();
-            page.Append(&record);
-        }
-    }
-    file.AddPage(&page, pageOffset++);
-    cout << numRecords << " records Added to file" << endl;
-    fclose(fd); //close the opened file
-    return;
+int DBFile::Load(Schema &f_schema, char *loadpath) {
+    genericDbFile->Load(f_schema, loadpath);
 }
 
 void DBFile::Add(Record &addMe) {
-    //append the record to the end of the page.
-    if (!page.Append(&addMe)) {
-        page.EmptyItOut();
-        page.Append(&addMe);
-    }
-    return;
+    genericDbFile->Add(addMe);
 }
 
 void DBFile::MoveFirst() {
-    page.EmptyItOut();
-    //move to the first one
-    pageOffset = 0;
+    //move to the first page
+    genericDbFile->MoveFirst();
 }
 
 int DBFile::Create(const char *f_path, fType f_type, void *startup) {
     if (f_type == heap) {
-        file.Open(0, f_path);
-        cout << "file created successfully";
-        return 1;
+        genericDbFile = new HeapDBFile();
+    } else if (f_type == sorted) {
+        genericDbFile = new SortedDBFile();
     }
-    return 0;
+    genericDbFile->Create(f_path, f_type, startup);
 }
 
 
 int DBFile::Open(const char *f_path) {
-    file.Open(1, f_path);
-    return 1;
+    genericDbFile->Open(f_path);
 }
 
 
 int DBFile::Close() {
-    pageOffset = 0;
-    return file.Close();
+    genericDbFile->Close();
 }
 
 
 int DBFile::GetNext(Record &fetchme) {
-    if (!page.GetFirst(&fetchme)) {
-        if (pageOffset + 1 >= file.GetLength())
-            return 0;
-        file.GetPage(&page, pageOffset++);
-        page.GetFirst(&fetchme);
-    }
-    return 1;
+    genericDbFile->GetNext(fetchme);
 }
 
 int DBFile::GetNext(Record &fetchme, CNF &cnf, Record &literal) {
-    int flag = 0;
-    ComparisonEngine comp;
-    while (GetNext(fetchme)) {
-        if (comp.Compare(&fetchme, &literal, &cnf)) {
-            flag = 1;
-            break;
-        }
-    }
-    if (flag == 0) {
-        return 0;
-    }
-    return 1;
+    genericDbFile->GetNext(fetchme, cnf, literal);
 }
 
 

@@ -1,6 +1,5 @@
 #include "File.h"
 #include "TwoWayList.cc"
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -195,7 +194,6 @@ void File::AddPage(Page *addMe, off_t whichPage) {
 
     // this is because the first page has no data
     whichPage++;
-
     // if we are trying to add past the end of the file, then
     // zero all of the pages out
     if (whichPage >= curLength) {
@@ -228,7 +226,7 @@ void File::AddPage(Page *addMe, off_t whichPage) {
 }
 
 
-void File::Open(int fileLen, char *fName) {
+void File::Open(int fileLen, const  char *fName) {
 
     // figure out the flags for the system open call
     int mode;
@@ -283,4 +281,7 @@ int File::Close() {
 
 }
 
+int File::getFileDes() {
+    return myFilDes;
+}
 

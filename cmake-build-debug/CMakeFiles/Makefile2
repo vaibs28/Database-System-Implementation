@@ -44,21 +44,21 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/vaibhav/Documents/UF CISE/DBI/P1"
+CMAKE_SOURCE_DIR = /Users/vaibhav/Desktop/DBIWorkingCode/a2test
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug"
+CMAKE_BINARY_DIR = /Users/vaibhav/Desktop/DBIWorkingCode/a2test/cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/P1.dir/all
+all: CMakeFiles/a2test.dir/all
 
 .PHONY : all
 
 # The main recursive "clean" target.
-clean: CMakeFiles/P1.dir/clean
+clean: CMakeFiles/a2test.dir/clean
 
 .PHONY : clean
 
@@ -68,31 +68,31 @@ preinstall:
 .PHONY : preinstall
 
 #=============================================================================
-# Target rules for target CMakeFiles/P1.dir
+# Target rules for target CMakeFiles/a2test.dir
 
 # All Build rule for target.
-CMakeFiles/P1.dir/all:
-	$(MAKE) -f CMakeFiles/P1.dir/build.make CMakeFiles/P1.dir/depend
-	$(MAKE) -f CMakeFiles/P1.dir/build.make CMakeFiles/P1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" --progress-num=1,2,3,4,5,6,7,8,9,10 "Built target P1"
-.PHONY : CMakeFiles/P1.dir/all
+CMakeFiles/a2test.dir/all:
+	$(MAKE) -f CMakeFiles/a2test.dir/build.make CMakeFiles/a2test.dir/depend
+	$(MAKE) -f CMakeFiles/a2test.dir/build.make CMakeFiles/a2test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/vaibhav/Desktop/DBIWorkingCode/a2test/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 "Built target a2test"
+.PHONY : CMakeFiles/a2test.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/P1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" 10
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/P1.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/vaibhav/Documents/UF CISE/DBI/P1/cmake-build-debug/CMakeFiles" 0
-.PHONY : CMakeFiles/P1.dir/rule
+CMakeFiles/a2test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/vaibhav/Desktop/DBIWorkingCode/a2test/cmake-build-debug/CMakeFiles 15
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/a2test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/vaibhav/Desktop/DBIWorkingCode/a2test/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/a2test.dir/rule
 
 # Convenience name for target.
-P1: CMakeFiles/P1.dir/rule
+a2test: CMakeFiles/a2test.dir/rule
 
-.PHONY : P1
+.PHONY : a2test
 
 # clean rule for target.
-CMakeFiles/P1.dir/clean:
-	$(MAKE) -f CMakeFiles/P1.dir/build.make CMakeFiles/P1.dir/clean
-.PHONY : CMakeFiles/P1.dir/clean
+CMakeFiles/a2test.dir/clean:
+	$(MAKE) -f CMakeFiles/a2test.dir/build.make CMakeFiles/a2test.dir/clean
+.PHONY : CMakeFiles/a2test.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.15)
-project(P1)
+project(a2test)
 
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
-add_executable(P1
+add_executable(a2test
+        BigQ.cc
+        BigQ.h
         Comparison.cc
         Comparison.h
         ComparisonEngine.cc
@@ -15,15 +17,17 @@ add_executable(P1
         Defs.h
         File.cc
         File.h
-        lex.yy.c
-        main.cc
         ParseTree.h
+        Pipe.cc
+        Pipe.h
         Record.cc
         Record.h
         Schema.cc
         Schema.h
-        test.h
+        test2.cc
+        test2.h
         TwoWayList.cc
         TwoWayList.h
-        y.tab.o
-        )
+        Parser.y
+        lex.yy.c
+        y.tab.o CustomComparator2.h GenericDBFile.h HeapDBFile.cc HeapDBFile.h SortedDBFile.cc SortedDBFile.h GenericDBFile.cc)
