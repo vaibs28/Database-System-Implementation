@@ -36,10 +36,6 @@ public:
 
     void MoveFirst();
 
-    int AddToOutPipeFile(Record &rec);
-
-    void FlushWritePage();
-
     void Add(Record &addme);
 
     int Create(const char *f_path, fType file_type, void *startup);

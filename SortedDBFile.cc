@@ -5,9 +5,18 @@
 #include "SortedDBFile.h"
 #include <iostream>
 #include <sstream>
+#define BUFFER_SIZE 100
 
 OrderMaker *myOrder;
 int runLength;
+
+void SortedDBFile::MergeFileDataWithQueueData() {
+    input->ShutDown();
+    Record* removedRecord;
+    while(output->Remove(removedRecord)){
+
+    }
+}
 
 int SortedDBFile::Create(const char *f_path, fType file_type, void *startup) {
     file.Open(0, f_path);   // passing 0 as the first argument to create a new file at the given path
@@ -36,10 +45,12 @@ int SortedDBFile::Load(Schema &myschema, char *loadpath) {
 
 void SortedDBFile::Add(Record &addme) {
     if (mode == Writing) {
+        input->Insert(&addme);
+    } else if (mode == Reading) {
+        input = new Pipe(BUFFER_SIZE);
+        output = new Pipe(BUFFER_SIZE);
         bigQinstance = new BigQ(reinterpret_cast<Pipe &>(input), reinterpret_cast<Pipe &>(output),
                                 reinterpret_cast<OrderMaker &>(myOrder), runLength);
-    } else if (mode == Reading) {
-        input->Insert(&addme);
         mode = Writing;
     }
 }
@@ -105,6 +116,7 @@ int SortedDBFile::GetNext(Record &fetchme, CNF &cnf, Record &literal) {
 
 
 int SortedDBFile::Open(const char *fpath) {
+
 }
 
 int SortedDBFile::readMetaData(ifstream &ifs) {
