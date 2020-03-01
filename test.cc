@@ -1,11 +1,12 @@
 #include <iostream>
 #include "DBFile.h"
 #include "test.h"
+#include "Constants.h"
 
 // make sure that the file path/dir information below is correct
-const char *dbfile_dir = "/Users/vaibhav/Documents/UF CISE/temp/"; // dir where binary heap files should be stored
-const char *tpch_dir ="/Users/vaibhav/Documents/UF CISE/DBI/P1/table/"; // dir where dbgen tpch files (extension *.tbl) can be found
-const char *catalog_path = "/Users/vaibhav/Documents/UF CISE/DBI/P1/catalog"; // full path of the catalog file
+const char *dbfile_dir = DBFILE_PATH; // dir where binary heap files should be stored
+const char *tpch_dir = TPCH_PATH; // dir where dbgen tpch files (extension *.tbl) can be found
+const char *catalog_path = CATALOG_PATH; // full path of the catalog file
 
 using namespace std;
 

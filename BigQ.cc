@@ -148,8 +148,6 @@ int BigQ::generateRuns(OrderMaker &sortorder) {
     }
     //internal sort all the records using stdlib
     std::sort(recordArray.begin(), recordArray.end(), CustomComparator(&sortorder));
-
-    Schema mySchema("/Users/vaibhav/Downloads/a2test/catalog", "lineitem");
 }
 
 void BigQ::writeRunsToFile(int runlen){

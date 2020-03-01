@@ -23,7 +23,7 @@ public:
 
     int Create(const char *fpath, fType file_type, void *startup);
 
-    int Open(char *fpath);
+    int Open(const char *fpath);
 
     int Close();
 

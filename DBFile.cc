@@ -64,7 +64,7 @@ int DBFile::Create(const char *f_path, fType f_type, void *startup) {
 }
 
 
-int DBFile::Open(char *f_path) {
+int DBFile::Open(const char *f_path) {
     //read metadata and invoke the corresponding file instance
 
     string type;
