@@ -134,7 +134,7 @@ BigQ::BigQ(Pipe &in, Pipe &out, OrderMaker &sortorder, int runlen) {
 
 BigQ::~BigQ() {}
 
-void BigQ::generateRuns(OrderMaker &sortorder) {
+int BigQ::generateRuns(OrderMaker &sortorder) {
     for (int i = 0; i < pageArray.size(); i++) {
         Record *temp = new Record();
         while (pageArray[i]->GetFirst(temp)) {
