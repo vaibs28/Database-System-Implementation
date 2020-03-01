@@ -25,12 +25,13 @@ public:
     Pipe* input;
     Pipe* output;
     BigQ* bigQinstance;
+    OrderMaker om;
 
-    SortedDBFile() {}
+    SortedDBFile();
 
-    ~SortedDBFile(){}
+    ~SortedDBFile();
 
-    int readMetaData (ifstream &ifs);
+    int readMetaData (const char *fpath);
 
     void MergeFileDataWithQueueData();
 
@@ -49,6 +50,8 @@ public:
     int GetNext(Record &fetchme);
 
     int GetNext(Record &fetchme, CNF &cnf, Record &literal);
+
+    void examineCNF(CNF &cnf);
 };
 
 

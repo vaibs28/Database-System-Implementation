@@ -31,25 +31,25 @@ protected:
     static bool isBeingRead;   // flag to check if the file is being read
 
 public:
-    GenericDBFile();
+    GenericDBFile(){};
 
-    ~GenericDBFile();
+    ~GenericDBFile(){};
 
-    virtual int Create(const char *fpath, fType file_type, void *startup);
+    virtual int Create(const char *fpath, fType file_type, void *startup) = 0;
 
-    virtual int Open(const char *fpath);
+    virtual int Open(const char *fpath) = 0;
 
-    virtual int Close();
+    virtual int Close() = 0;
 
-    virtual int Load(Schema &myschema, char *loadpath);
+    virtual int Load(Schema &myschema, char *loadpath) = 0;
 
-    virtual void MoveFirst();
+    virtual void MoveFirst() = 0;
 
-    virtual void Add(Record &addme);
+    virtual void Add(Record &addme) = 0;
 
-    virtual int GetNext(Record &fetchme);
+    virtual int GetNext(Record &fetchme) = 0;
 
-    virtual int GetNext(Record &fetchme, CNF &cnf, Record &literal);
+    virtual int GetNext(Record &fetchme, CNF &cnf, Record &literal) = 0;
 };
 
 #endif //A2TEST_GENERICDBFILE_H

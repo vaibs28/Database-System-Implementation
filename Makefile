@@ -7,12 +7,18 @@ ifdef linux
 tag = -n
 endif
 
-test.out: Record.o Comparison.o ComparisonEngine.o Schema.o File.o BigQ.o DBFile.o Pipe.o y.tab.o lex.yy.o test2.o
-	$(CC) -o test.out Record.o Comparison.o ComparisonEngine.o Schema.o File.o BigQ.o DBFile.o Pipe.o y.tab.o lex.yy.o test2.o -ll -lpthread
+a22test.out: Record.o Comparison.o ComparisonEngine.o Schema.o File.o BigQ.o GenericDBFile.o DBFile.o  HeapDBFile.o SortedDBFile.o Pipe.o y.tab.o lex.yy.o test3.o
+	$(CC) -o a22test.out Record.o Comparison.o ComparisonEngine.o Schema.o File.o BigQ.o GenericDBFile.o DBFile.o HeapDBFile.o SortedDBFile.o Pipe.o y.tab.o lex.yy.o test3.o -ll -lpthread
+
+a21test.out: Record.o Comparison.o ComparisonEngine.o Schema.o File.o BigQ.o GenericDBFile.o DBFile.o  HeapDBFile.o Pipe.o y.tab.o lex.yy.o test2.o
+	$(CC) -o a21test.out Record.o Comparison.o ComparisonEngine.o Schema.o File.o BigQ.o GenericDBFile.o DBFile.o HeapDBFile.o Pipe.o y.tab.o lex.yy.o test2.o -ll -lpthread
 	
-a1test.out: Record.o Comparison.o ComparisonEngine.o Schema.o File.o DBFile.o Pipe.o y.tab.o lex.yy.o a1-test.o
-	$(CC) -o a1test.out Record.o Comparison.o ComparisonEngine.o Schema.o File.o DBFile.o Pipe.o y.tab.o lex.yy.o a1-test.o -ll
-	
+a1test.out: Record.o Comparison.o ComparisonEngine.o Schema.o File.o GenericDBFile.o DBFile.o  HeapDBFile.o y.tab.o lex.yy.o a1-test.o
+	$(CC) -o a1test.out Record.o Comparison.o ComparisonEngine.o Schema.o File.o GenericDBFile.o DBFile.o HeapDBFile.o y.tab.o lex.yy.o a1-test.o -ll
+
+test3.o: test3.cc
+	$(CC) -g -c test3.cc
+
 test2.o: test2.cc
 	$(CC) -g -c test2.cc
 
@@ -42,7 +48,16 @@ Record.o: Record.cc
 
 Schema.o: Schema.cc
 	$(CC) -g -c Schema.cc
-	
+
+GenericDBFile.o: GenericDBFile.cc
+	$(CC) -g -c GenericDBFile.cc
+
+HeapDBFile.o: HeapDBFile.cc
+	$(CC) -g -c HeapDBFile.cc
+
+SortedDBFile.o: SortedDBFile.cc
+	$(CC) -g -c SortedDBFile.cc
+
 y.tab.o: Parser.y
 	yacc -d Parser.y
 	gsed $(tag) y.tab.c -e "s/  __attribute__ ((__unused__))$$/# ifndef __cplusplus\n  __attribute__ ((__unused__));\n# endif/"
