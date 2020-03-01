@@ -13,7 +13,6 @@ int runLength;
 Schema *orderMakerSchema;
 
 SortedDBFile::SortedDBFile(){
-
 }
 
 int SortedDBFile::Create(const char *f_path, fType file_type, void *startup) {
@@ -36,15 +35,25 @@ int SortedDBFile::Load(Schema &myschema, char *loadpath) {
     }
 }
 
+void* run (void *arg) {
+
+    bigq_util *t = (bigq_util *) arg;
+    BigQ b_queue(*(t->in),*(t->out),*(t->sort_order),t->run_len);
+}
+
 void SortedDBFile::Add(Record &addme) {
     if (mode == Writing) {
         input->Insert(&addme);
     } else if (mode == Reading) {
-        input = new Pipe(BUFFER_SIZE);      // create new instance of the pipes
-        output = new Pipe(BUFFER_SIZE);
-        bigQinstance = new BigQ(reinterpret_cast<Pipe &>(input), reinterpret_cast<Pipe &>(output),
-                                reinterpret_cast<OrderMaker &>(myOrder), runLength);
-        input->Insert(&addme);
+        Pipe input(BUFFER_SIZE);      // create new instance of the pipes
+        Pipe output(BUFFER_SIZE);
+        util = new bigq_util ();
+        util->in = &input;
+        util->out = &output;
+        util->run_len = runLength;
+        util->sort_order = myOrder;
+        pthread_create (&bigQThread, NULL, run, (void*)util);
+        input.Insert(&addme);
         mode = Writing;
     } else {
         cout << "error" <<endl;

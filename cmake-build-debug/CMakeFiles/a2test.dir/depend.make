@@ -10,7 +10,6 @@ CMakeFiles/a2test.dir/BigQ.cc.o: ../BigQ.h
 CMakeFiles/a2test.dir/BigQ.cc.o: ../Comparison.h
 CMakeFiles/a2test.dir/BigQ.cc.o: ../ComparisonEngine.h
 CMakeFiles/a2test.dir/BigQ.cc.o: ../CustomComparator.h
-CMakeFiles/a2test.dir/BigQ.cc.o: ../CustomComparator2.h
 CMakeFiles/a2test.dir/BigQ.cc.o: ../Defs.h
 CMakeFiles/a2test.dir/BigQ.cc.o: ../File.h
 CMakeFiles/a2test.dir/BigQ.cc.o: ../ParseTree.h

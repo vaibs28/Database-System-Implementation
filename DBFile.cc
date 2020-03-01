@@ -41,26 +41,36 @@ int DBFile::Create(const char *f_path, fType f_type, void *startup) {
         genericDbFile = new SortedDBFile();
     }
     genericDbFile->Create(f_path, f_type, startup);
+    //create metadata file
+    fstream metaFile;
+    string metaFileName;
+    metaFileName.append(f_path);
+    metaFileName.append(".meta");
+    metaFile.open(metaFileName,ios::out);
+    if(!metaFile)
+    {
+        cout<<"Error in creating Metafile!!!";
+        return 0;
+    }
+    cout<<"Metafile created successfully";
+    //write to metafile
+    string fileTypeToBeWritten;
+    if(f_type==0)
+        fileTypeToBeWritten = "heap";
+    else if(f_type==1)
+        fileTypeToBeWritten = "sorted";
+    metaFile << fileTypeToBeWritten;
+    return 1;
 }
 
 
 int DBFile::Open(char *f_path) {
     //read metadata and invoke the corresponding file instance
-    int i = 0;
-    while (f_path[i]!='\\'){
-        i++;
-    }
-    char* temp;
-    int j = 0;
-    while (f_path[i]!='\0'){
-        temp[j] = f_path[i];
-        j++;
-        i++;
-    }
+
     string type;
     string metafileName;
     string line;
-    metafileName.append(temp);
+    metafileName.append(f_path);
     metafileName.append(".meta");
     ifstream metafile(metafileName);
     int count = 0;

@@ -16,6 +16,12 @@ using namespace std;
 
 class ComparisonEngine;
 
+typedef struct {
+    Pipe *in;
+    Pipe *out;
+    OrderMaker* sort_order;
+    int run_len;
+} bigq_util;
 
 class BigQ {
 

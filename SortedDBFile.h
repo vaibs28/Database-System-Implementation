@@ -25,7 +25,9 @@ public:
     Pipe* input;
     Pipe* output;
     BigQ* bigQinstance;
+    bigq_util* util;
     OrderMaker om;
+    pthread_t bigQThread;
 
     SortedDBFile();
 
