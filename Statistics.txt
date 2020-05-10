@@ -1,0 +1,247 @@
+GROUP DETAILS
+Group Tables = lineitem
+Group Size = 1
+Rows Count = 857316
+
+TABLE DETAILS
+Table = lineitem
+Group = lineitem
+Rows = 857316
+l_discount 11
+l_returnflag 3
+l_shipmode 7
+
+*************************************************************************************************************************************************************************************************
+GROUP DETAILS
+Group Tables = orders,customer,nation
+Group Size = 3
+Rows Count = 1500000
+
+TABLE DETAILS
+Table = customer
+Group = orders,customer,nation
+Rows = 1500000
+c_custkey 150000
+c_nationkey 25
+
+Table = nation
+Group = orders,customer,nation
+Rows = 1500000
+n_nationkey 25
+
+Table = orders
+Group = orders,customer,nation
+Rows = 1500000
+o_custkey 150000
+
+*************************************************************************************************************************************************************************************************
+GROUP DETAILS
+Group Tables = c,s,n1,n2
+Group Size = 4
+Rows Count = 60000000
+
+TABLE DETAILS
+Table = c
+Group = c,s,n1,n2
+Rows = 60000000
+c.c_custkey 150000
+c.c_nationkey 25
+
+Table = customer
+Group = customer
+Rows = 150000
+c_custkey 150000
+c_nationkey 25
+
+Table = n1
+Group = c,s,n1,n2
+Rows = 60000000
+n1.n_nationkey 25
+
+Table = n2
+Group = c,s,n1,n2
+Rows = 60000000
+n2.n_nationkey 25
+
+Table = nation
+Group = nation
+Rows = 25
+n_nationkey 25
+
+Table = s
+Group = c,s,n1,n2
+Rows = 60000000
+s.s_nationkey 25
+
+Table = supplier
+Group = supplier
+Rows = 10000
+s_nationkey 25
+
+*************************************************************************************************************************************************************************************************
+GROUP DETAILS
+Group Tables = n
+Group Size = 1
+Rows Count = 25
+
+TABLE DETAILS
+Table = n
+Group = n
+Rows = 25
+n.n_nationkey 25
+n.n_regionkey 5
+
+Table = nation
+Group = part,partsupp,supplier,nation,region
+Rows = 3200
+n_nationkey 25
+n_regionkey 5
+
+Table = p
+Group = p
+Rows = 200000
+p.p_partkey 200000
+p.p_size 50
+
+Table = part
+Group = part,partsupp,supplier,nation,region
+Rows = 3200
+p_partkey 200000
+p_size 50
+
+Table = partsupp
+Group = part,partsupp,supplier,nation,region
+Rows = 3200
+ps_partkey 200000
+ps_suppkey 10000
+
+Table = ps
+Group = ps
+Rows = 800000
+ps.ps_partkey 200000
+ps.ps_suppkey 10000
+
+Table = r
+Group = r
+Rows = 5
+r.r_name 5
+r.r_regionkey 5
+
+Table = region
+Group = part,partsupp,supplier,nation,region
+Rows = 3200
+r_name 5
+r_regionkey 5
+
+Table = s
+Group = s
+Rows = 10000
+s.s_nationkey 25
+s.s_suppkey 10000
+
+Table = supplier
+Group = part,partsupp,supplier,nation,region
+Rows = 3200
+s_nationkey 25
+s_suppkey 10000
+
+*************************************************************************************************************************************************************************************************
+GROUP DETAILS
+Group Tables = customer,orders,lineitem
+Group Size = 3
+Rows Count = 400081
+
+TABLE DETAILS
+Table = customer
+Group = customer,orders,lineitem
+Rows = 400081
+c_custkey 150000
+c_mktsegment 5
+
+Table = lineitem
+Group = customer,orders,lineitem
+Rows = 400081
+l_orderkey 1500000
+
+Table = orders
+Group = customer,orders,lineitem
+Rows = 400081
+o_custkey 150000
+o_orderdate 99996
+o_orderkey 1500000
+
+*************************************************************************************************************************************************************************************************
+GROUP DETAILS
+Group Tables = partsupp,supplier,nation
+Group Size = 3
+Rows Count = 32000
+
+TABLE DETAILS
+Table = nation
+Group = partsupp,supplier,nation
+Rows = 32000
+n_name 25
+n_nationkey 25
+
+Table = partsupp
+Group = partsupp,supplier,nation
+Rows = 32000
+ps_suppkey 10000
+
+Table = supplier
+Group = partsupp,supplier,nation
+Rows = 32000
+s_nationkey 25
+s_suppkey 10000
+
+*************************************************************************************************************************************************************************************************
+GROUP DETAILS
+Group Tables = customer,orders,lineitem,nation
+Group Size = 4
+Rows Count = 2000405
+
+TABLE DETAILS
+Table = customer
+Group = customer,orders,lineitem,nation
+Rows = 2000405
+c_custkey 150000
+c_nationkey 25
+
+Table = lineitem
+Group = customer,orders,lineitem,nation
+Rows = 2000405
+l_orderkey 1500000
+
+Table = nation
+Group = customer,orders,lineitem,nation
+Rows = 2000405
+n_nationkey 25
+
+Table = orders
+Group = customer,orders,lineitem,nation
+Rows = 2000405
+o_custkey 150000
+o_orderdate 99996
+o_orderkey 1500000
+
+*************************************************************************************************************************************************************************************************
+GROUP DETAILS
+Group Tables = part,lineitem
+Group Size = 2
+Rows Count = 21433
+
+TABLE DETAILS
+Table = lineitem
+Group = part,lineitem
+Rows = 21433
+l_partkey 200000
+l_shipinstruct 4
+l_shipmode 7
+
+Table = part
+Group = part,lineitem
+Rows = 21433
+p_container 40
+p_partkey 200000
+
+*************************************************************************************************************************************************************************************************

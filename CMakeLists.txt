@@ -1,33 +1,52 @@
 cmake_minimum_required(VERSION 3.15)
-project(a2test)
+project(a3test)
 
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
-
-add_executable(a2test
-        BigQ.cc
-        BigQ.h
-        Comparison.cc
-        Comparison.h
-        ComparisonEngine.cc
-        ComparisonEngine.h
-        DBFile.cc
-        DBFile.h
-        Defs.h
-        File.cc
-        File.h
-        ParseTree.h
-        Pipe.cc
-        Pipe.h
-        Record.cc
-        Record.h
-        Schema.cc
-        Schema.h
-        test2.cc
-        test2.h
-        TwoWayList.cc
-        TwoWayList.h
+include_directories(./temp/)
+configure_file(catalog ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+configure_file(test.cat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+add_executable(main
+        main.cc
         Parser.y
         lex.yy.c
-        y.tab.o CustomComparator2.h GenericDBFile.h HeapDBFile.cc HeapDBFile.h SortedDBFile.cc SortedDBFile.h GenericDBFile.cc)
+        y.tab.o
+        ParseTree.h
+        Record.h
+        Function.h
+        Function.cc
+        Record.cc
+        Comparison.h
+        Comparison.cc
+        #Compiler.h
+        #Compiler.cpp
+        ComparisonEngine.h
+        ComparisonEngine.cc
+        #CompilerInterfaces.h
+        File.h
+        File.cc
+        GenericDBFile.h
+        GenericDBFile.cc
+        DBFile.h
+        DBFile.cc
+        Statistics.h
+        Statistics.cc
+        HeapDBFile.h
+        HeapDBFile.cc
+        SortedDBFile.h
+        SortedDBFile.cc
+        BigQ.h
+        BigQ.cc
+        RelOp.h
+        RelOp.cc
+        TwoWayList.h
+        TwoWayList.cc
+        Pipe.h
+        Pipe.cc
+        Schema.h
+        Schema.cc
+        catalog
+        QueryPlanner.cc
+        QueryNode.cc
+        Ddl.cc Ddl.h)

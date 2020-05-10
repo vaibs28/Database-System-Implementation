@@ -6,7 +6,13 @@
 #include "File.h"
 #include "Comparison.h"
 #include "ComparisonEngine.h"
+#include <fstream>
+using namespace std;
 
+typedef struct{
+    int attNo;
+    Type attType;
+} myAtt;
 
 // This stores an individual comparison that is part of a CNF
 class Comparison {
@@ -32,6 +38,7 @@ public:
 
 	// print to the screen
 	void Print ();
+    void leftrightJoinAtts(int *left,int *right);
 };
 
 
@@ -43,13 +50,10 @@ class OrderMaker {
 	friend class ComparisonEngine;
 	friend class CNF;
 
-	int numAtts;
-
-	int whichAtts[MAX_ANDS];
-	Type whichTypes[MAX_ANDS];
-
 public:
-	
+    int numAtts;
+    int whichAtts[MAX_ANDS];
+    Type whichTypes[MAX_ANDS];
 	// creates an empty OrdermMaker
 	OrderMaker();
 
@@ -59,6 +63,18 @@ public:
 
 	// print to the screen
 	void Print ();
+    void PrintToFile (ofstream &myf);
+    void WriteToMetaFile(fstream &fileout);
+    int CreateFromFile(ifstream &myf);
+    int Add(int attIndex, Type attType);
+    void growFromParseTree(NameList* gAtts, Schema* inputSchema);
+    void initOrderMaker(int numAtts, myAtt *myAtts);
+
+    int GetNumAtts();
+
+    int *GetAtts();
+
+    Type *GetAttTypes();
 };
 
 class Record;
@@ -83,10 +99,11 @@ public:
 	// only if it is impossible to determine an acceptable ordering
 	// for the given comparison
 	int GetSortOrders (OrderMaker &left, OrderMaker &right);
-
+    int GetCNFSortOrders (OrderMaker &left, OrderMaker &right);
+    OrderMaker* PrepareCnfQueryOrderMaker(OrderMaker &srtorder);
 	// print the comparison structure to the screen
 	void Print ();
-
+    void leftrightJoinAtts(int *left,int *right);
         // this takes a parse tree for a CNF and converts it into a 2-D
         // matrix storing the same CNF expression.  This function is applicable
         // specifically to the case where there are two relations involved
@@ -98,6 +115,7 @@ public:
         void GrowFromParseTree (struct AndList *parseTree, Schema *mySchema, 
 		Record &literal);
 
+    int GetQuerySortOrders(OrderMaker &left, OrderMaker &right);
 };
 
 #endif

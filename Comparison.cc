@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
-
+#include <fstream>
 #include "Comparison.h"
 
 
@@ -117,7 +117,21 @@ void OrderMaker :: Print () {
 	}
 }
 
-
+int OrderMaker ::Add(int attIndex, Type attType)
+{
+    if (numAtts < MAX_ANDS)
+    {
+        whichAtts[numAtts] = attIndex;
+        whichTypes[numAtts] = attType;
+        numAtts++;
+    }
+    else
+    {
+        cerr << "ERROR: Can't add attributes, number of attributes in OrderMaker over" << MAX_ANDS;
+        return 0;
+    }
+    return 1;
+}
 
 int CNF :: GetSortOrders (OrderMaker &left, OrderMaker &right) {
 
@@ -615,4 +629,257 @@ void CNF :: GrowFromParseTree (struct AndList *parseTree, Schema *mySchema,
 	remove("hkljdfgkSDFSDF");
 }
 
+void OrderMaker :: WriteToMetaFile (fstream &file) {
+    file << numAtts << endl;
+    for (int i = 0; i < numAtts; i++)
+    {
+        file << whichAtts[i] << endl;
+        if (whichTypes[i] == Int)
+            file << "Int" << endl;
+        else if (whichTypes[i] == Double)
+            file << "Double" << endl;
+        else
+            file << "String" << endl;
+    }
+}
 
+
+int CNF :: GetQuerySortOrders (OrderMaker &left, OrderMaker &right) {
+    left.numAtts = 0;
+    int res=0;
+    for(int j=0;j<right.numAtts;j++){
+        bool found=false;
+        for (int i = 0; i < numAnds; i++) {
+            if (orLens[i] != 1) {
+                continue;
+            }
+
+            if (orList[i][0].op != Equals) {
+                continue;
+            }
+
+            if ((orList[i][0].operand1 == Left && orList[i][0].operand2 == Left) ||
+                (orList[i][0].operand2 == Right && orList[i][0].operand1 == Right) ||
+                (orList[i][0].operand1==Left && orList[i][0].operand2 == Right) ||
+                (orList[i][0].operand1==Right && orList[i][0].operand2 == Left)) {
+                continue;
+            }
+            if (orList[i][0].operand1 == Left ) {
+                if (orList[i][0].whichAtt1==right.whichAtts[j] ){
+                    found=true;
+                    left.whichAtts[res]=orList[i][0].whichAtt2;
+                    left.whichTypes[res++]=orList[i][0].attType;
+                    break;
+                }
+            }
+            else if(orList[i][0].operand2==Left){
+                if(orList[i][0].whichAtt2==right.whichAtts[j]){
+                    found=true;
+                    left.whichAtts[res]=orList[i][0].whichAtt1;
+                    left.whichTypes[res++]=orList[i][0].attType;
+                    break;
+                }
+            }
+
+
+        }
+        if(found==false)
+            break;
+
+    }
+    left.numAtts=res;
+    return res;
+}
+
+int OrderMaker::CreateFromFile (ifstream &myf)
+{
+    string line;
+    int i = 0;
+    int sortrunlen=-1;
+    if (myf.is_open())
+    {
+        getline (myf,line);
+        getline (myf,line);
+        sortrunlen=atoi(line.c_str());
+        getline (myf,line);
+        numAtts=atoi(line.c_str());
+        while ( myf.good() )
+        {
+            getline (myf,line);
+            whichAtts[i] = atoi(line.c_str());
+            //cout<<"\n Inside CreateFromFile:"<<whichAtts;
+            getline (myf,line);
+            if (line.compare("Int")==0)
+            {
+                whichTypes[i] = Int;
+            }
+            else if (line.compare("Double")==0)
+            {
+                whichTypes[i] = Double;
+            }
+            else
+                whichTypes[i] = String;
+            i++;
+        }
+    }
+    return sortrunlen;
+}
+
+void CNF::leftrightJoinAtts(int* left, int* right)
+{
+    for (int i = 0; i < numAnds; i++) {
+
+        for (int j = 0; j < orLens[i]; j++) {
+            orList[i][j].leftrightJoinAtts (left,right);
+            cout<<"\n inside CNF:"<<*left<<" "<<*right;
+        }
+
+
+    }
+}
+
+void Comparison :: leftrightJoinAtts (int *left,int* right) {
+    if(op==Equals)
+    {
+        if (operand1 == Left)
+            *left=whichAtt1;
+        else if (operand1 == Right)
+            *right=whichAtt1;
+        if (operand2 == Left)
+            *left=whichAtt2;
+        else if (operand2 == Right)
+            *right=whichAtt2;
+    }
+    cout<<"\n Left Value:"<<*left<<" Right Value:"<<*right;
+}
+
+void OrderMaker::PrintToFile (ofstream &myf)
+{
+    myf<<numAtts<<"\n";
+    for (int i = 0; i < numAtts; i++)
+    {
+        myf<<whichAtts[i]<<"\n";
+        if (whichTypes[i] == Int)
+            myf<<"Int\n";
+        else if (whichTypes[i] == Double)
+            myf<<"Double\n";
+        else
+            myf<<"String\n";
+    }
+}
+
+int CNF::GetCNFSortOrders(OrderMaker& left, OrderMaker& right)
+{
+    // initialize the size of the OrderMakers
+    left.numAtts = 0;
+    right.numAtts = 0;
+
+    // loop through all of the disjunctions in the CNF and find those
+    // that are acceptable for use in a sort ordering
+    for (int i = 0; i < numAnds; i++) {
+
+        // if we don't have a disjunction of length one, then it
+        // can't be acceptable for use with a sort ordering
+        if (orLens[i] != 1) {
+            continue;
+        }
+        // made it this far, so first verify that it is an equality check
+        if (orList[i][0].op != Equals) {
+            continue;
+        }
+        // now verify that it operates over atts from both tables
+        if (!((orList[i][0].operand1 == Left && orList[i][0].operand2 == Right) ||
+              (orList[i][0].operand2 == Left && orList[i][0].operand1 == Right))) {
+//                      continue;
+        }
+        // since we are here, we have found a join attribute!!!
+        // so all we need to do is add the new comparison info into the
+        // relevant structures
+        if (orList[i][0].operand1 == Left) {
+            left.whichAtts[left.numAtts] = orList[i][0].whichAtt1;
+            left.whichTypes[left.numAtts] = orList[i][0].attType;
+            right.whichAtts[right.numAtts] = orList[i][0].whichAtt2;
+            right.whichTypes[right.numAtts] = orList[i][0].attType;
+        }
+        if (orList[i][0].operand1 == Right) {
+            right.whichAtts[right.numAtts] = orList[i][0].whichAtt1;
+            right.whichTypes[right.numAtts] = orList[i][0].attType;
+        }
+        if (orList[i][0].operand2 == Left) {
+            left.whichAtts[left.numAtts] = orList[i][0].whichAtt2;
+            left.whichTypes[left.numAtts] = orList[i][0].attType;
+        }
+
+        if (orList[i][0].operand2 == Right) {
+            right.whichAtts[right.numAtts] = orList[i][0].whichAtt2;
+            right.whichTypes[right.numAtts] = orList[i][0].attType;
+        }
+
+        // note that we have found two new attributes
+        left.numAtts++;
+        right.numAtts++;
+    }
+
+    return left.numAtts;
+}
+
+OrderMaker* CNF::PrepareCnfQueryOrderMaker(OrderMaker &srtorder){
+
+    OrderMaker cnf_order;
+    OrderMaker sortOrderCopy = srtorder;
+    GetCNFSortOrders(cnf_order, sortOrderCopy);
+
+    OrderMaker *query = new OrderMaker();
+
+    for (int i = 0; i < srtorder.numAtts; i++)
+    {
+        bool matched = false;
+        for(int j = 0; j < cnf_order.numAtts; j++)
+        {
+            if((srtorder.whichAtts[i] == cnf_order.whichAtts[j]) && (srtorder.whichTypes[i] == cnf_order.whichTypes[j]))
+            {
+                matched = true;
+                query->whichAtts[query->numAtts] = sortOrderCopy.whichAtts[j];  //number your atts accordingly as we are appending
+                query->whichTypes[query->numAtts] = sortOrderCopy.whichTypes[j];
+                query->numAtts++;
+                break;
+            }
+        }
+        if(!matched)
+            break;
+    }
+    if(query->numAtts > 0)
+        return query;
+    else
+    {
+        delete query;
+        return NULL;
+    }
+
+}
+
+void OrderMaker :: initOrderMaker(int numAtts, myAtt* myAtts){
+    this->numAtts = numAtts;
+    for(int i=0;i<numAtts;i++){
+        whichAtts[i] = myAtts[i].attNo;
+        whichTypes[i] = myAtts[i].attType;
+    }
+}
+
+void OrderMaker::growFromParseTree(NameList* gAtts, Schema* inputSchema) {
+    for(; gAtts; gAtts = gAtts->next, numAtts++) {
+        whichTypes[numAtts] = inputSchema->FindType(gAtts->name);
+    }
+}
+
+int OrderMaker :: GetNumAtts () {
+    return numAtts;
+}
+
+int *OrderMaker :: GetAtts() {
+    return whichAtts;
+}
+
+Type *OrderMaker :: GetAttTypes() {
+    return whichTypes;
+}

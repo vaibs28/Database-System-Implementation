@@ -6,7 +6,7 @@
 #ifndef DBI_MASTER_CONSTANTS_H
 #define DBI_MASTER_CONSTANTS_H
 
-#define DBFILE_PATH "temp/"
+#define DBFILE_PATH ""
 #define TPCH_PATH "/Users/vaibhav/Documents/UF CISE/DBI/P1/table/"
 #define CATALOG_PATH "catalog"
 #define LINEITEM "lineitem.tbl"

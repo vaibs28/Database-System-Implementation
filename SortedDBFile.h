@@ -10,6 +10,7 @@
 #include "GenericDBFile.h"
 #include "Pipe.h"
 #include "BigQ.h"
+#include "HeapDBFile.h"
 
 typedef enum {Reading, Writing} Mode;
 
@@ -24,10 +25,11 @@ public:
     Mode mode;
     Pipe* input;
     Pipe* output;
-    BigQ* bigQinstance;
-    bigq_util* util;
-    OrderMaker om;
+    bigq_util * util;
     pthread_t bigQThread;
+    bool queryBuilt;
+    bool sortOrderExists;
+    OrderMaker *query;
 
     SortedDBFile();
 
@@ -54,6 +56,14 @@ public:
     int GetNext(Record &fetchme, CNF &cnf, Record &literal);
 
     void examineCNF(CNF &cnf);
+
+    void clearQueues();
+
+    int BinarySearch(Record &fetchme, CNF &cnf, Record &literal);
+
+    int FindFromCNF(Record &record, CNF &cnf, Record &record1);
+
+    int FindFromSortOrder(Record &record, CNF &cnf, Record &record1);
 };
 
 

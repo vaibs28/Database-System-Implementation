@@ -107,6 +107,9 @@ void Page::ToBinary(char *bits) {
     }
 }
 
+int Page :: getCurSizeInBytes(){
+    return curSizeInBytes-sizeof (int);
+}
 
 void Page::FromBinary(char *bits) {
 
@@ -285,3 +288,36 @@ int File::getFileDes() {
     return myFilDes;
 }
 
+Run :: Run(File* file,int start, int end){
+    startIndex=start;
+    endIndex = end;
+    tmpFile=file;
+    currentRunPage=new Page;
+    tmpFile->GetPage(currentRunPage,startIndex++);
+}
+
+Run :: ~Run(){
+    delete currentRunPage;
+}
+
+// Get the records from the respective Page Index for the runs
+int Run::GetNext(Record *first){
+    if(startIndex <= endIndex){
+        if(currentRunPage->GetFirst(first) == 1)
+            return 1;
+        else if(startIndex < endIndex){
+            tmpFile->GetPage(currentRunPage,startIndex++);
+            currentRunPage->GetFirst(first);
+            return 1;
+        }
+        else return 0;
+    }
+    else
+        return 0;
+}
+
+
+RunRecord::RunRecord(Record* whichRecord, Run* whichRun){
+    record=whichRecord;
+    run= whichRun;
+}

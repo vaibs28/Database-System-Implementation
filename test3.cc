@@ -26,7 +26,6 @@ int add_data (FILE *src, int numrecs, int &res) {
 // create a dbfile interactively
 void test1 () {
 
-    cout<<"test1"<<endl;
 	OrderMaker o;
 
 	int runlen = 0;
@@ -60,11 +59,12 @@ void test1 () {
 			cout << " \t 2. add a lot (1k to 1e+06 recs) \n";
 			cout << " \t 3. run some query \n \t ";
 			cin >> x;
-			x = 2; //hack
+			x = 2;
 		}
 		if (x < 3) {
 			proc = add_data (tblfile,lrand48()%(int)pow(1e3,x)+(x-1)*1000, res);
 			tot += proc;
+			proc = proc-1;
 			if (proc) 
 				cout << "\n\t added " << proc << " recs..so far " << tot << endl;
 		}
@@ -72,6 +72,7 @@ void test1 () {
 			test3 ();
 		}
 	}
+	tot = tot - 1;
 	cout << "\n create finished.. " << tot << " recs inserted\n";
 	fclose (tblfile);
 }

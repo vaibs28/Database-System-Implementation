@@ -22,11 +22,14 @@ DBFile::~DBFile() {
 
 //loads the DBFile instance from a textfile
 int DBFile::Load(Schema &f_schema, char *loadpath) {
-    genericDbFile->Load(f_schema, loadpath);
+    if(genericDbFile!=NULL)
+        return genericDbFile->Load(f_schema, loadpath);
+    return -1;
 }
 
 void DBFile::Add(Record &addMe) {
-    genericDbFile->Add(addMe);
+    if(genericDbFile!=NULL)
+        genericDbFile->Add(addMe);
 }
 
 void DBFile::MoveFirst() {
@@ -39,6 +42,9 @@ int DBFile::Create(const char *f_path, fType f_type, void *startup) {
         genericDbFile = new HeapDBFile();
     } else if (f_type == sorted) {
         genericDbFile = new SortedDBFile();
+    }else{
+        cerr << "Not a valid type"<<endl;
+        return -1;
     }
     genericDbFile->Create(f_path, f_type, startup);
     //create metadata file
@@ -52,21 +58,31 @@ int DBFile::Create(const char *f_path, fType f_type, void *startup) {
         cout<<"Error in creating Metafile!!!";
         return 0;
     }
-    cout<<"Metafile created successfully";
+    cout<<"Metafile created successfully"<<endl;
     //write to metafile
     string fileTypeToBeWritten;
+    SortInfo *sortInfo;
+    OrderMaker* myOrder;
+    int runLength;
     if(f_type==0)
         fileTypeToBeWritten = "heap";
-    else if(f_type==1)
+    else if(f_type==1) {
         fileTypeToBeWritten = "sorted";
-    metaFile << fileTypeToBeWritten;
+        sortInfo = (SortInfo *) startup;
+        runLength = sortInfo->runLength;
+        myOrder = sortInfo->myOrder;
+    }
+    metaFile << fileTypeToBeWritten<<endl;
+    if(f_type==1) {
+        metaFile << runLength << endl;
+        myOrder->WriteToMetaFile(metaFile);
+    }
     return 1;
 }
 
 
 int DBFile::Open(const char *f_path) {
     //read metadata and invoke the corresponding file instance
-
     string type;
     string metafileName;
     string line;
@@ -78,6 +94,7 @@ int DBFile::Open(const char *f_path) {
         while (getline(metafile , line)){
             if(count==0){
                 type = line;
+                count++;
             }
         }
     }
@@ -98,21 +115,25 @@ int DBFile::Open(const char *f_path) {
         cout<<"no implementation available";
     }
     //open the file
-    genericDbFile->Open(f_path);
+    return genericDbFile->Open(f_path);
 }
 
 
 int DBFile::Close() {
-    genericDbFile->Close();
+    if(genericDbFile!=NULL)
+        return genericDbFile->Close();
+    return -1;
 }
 
 
 int DBFile::GetNext(Record &fetchme) {
-    genericDbFile->GetNext(fetchme);
+    if(genericDbFile!=NULL)
+        return genericDbFile->GetNext(fetchme);
+    return -1;
 }
 
 int DBFile::GetNext(Record &fetchme, CNF &cnf, Record &literal) {
-    genericDbFile->GetNext(fetchme, cnf, literal);
+    if(genericDbFile!=NULL)
+        return genericDbFile->GetNext(fetchme, cnf, literal);
+    return -1;
 }
-
-

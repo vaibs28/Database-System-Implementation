@@ -3,12 +3,20 @@
 #define SCHEMA_H
 
 #include <stdio.h>
+#include <vector>
+#include <string>
 #include "Record.h"
 #include "Schema.h"
 #include "File.h"
 #include "Comparison.h"
 #include "ComparisonEngine.h"
 
+using namespace std;
+
+struct att_pair {
+	char *name;
+	Type type;
+};
 struct Attribute {
 
 	char *name;
@@ -18,7 +26,8 @@ struct Attribute {
 class OrderMaker;
 class Schema {
 
-	// gives the attributes in the schema
+
+// gives the attributes in the schema
 	int numAtts;
 	Attribute *myAtts;
 
@@ -31,27 +40,40 @@ public:
 
 	// gets the set of attributes, but be careful with this, since it leads
 	// to aliasing!!!
-	Attribute *GetAtts ();
+	Attribute *GetAtts();
 
 	// returns the number of attributes
-	int GetNumAtts ();
+	int GetNumAtts();
 
-	// this finds the position of the specified attribute in the schema
+    Schema(OrderMaker &order);
+
+    // this finds the position of the specified attribute in the schema
 	// returns a -1 if the attribute is not present in the schema
-	int Find (char *attName);
+	int Find(char *attName);
 
 	// this finds the type of the given attribute
-	Type FindType (char *attName);
+	Type FindType(char *attName);
 
 	// this reads the specification for the schema in from a file
-	Schema (const char *fName, const char *relName);
+	Schema(char *fName, char *relName);
+
+	Schema(Schema* old, vector<int> attsToKeep);
+
+	Schema(Schema* left, Schema* right);
+
+	// this composes a schema instance in-memory
+	Schema(char *fName, int num_atts, Attribute *atts);
 
 	// this constructs a sort order structure that can be used to
 	// place a lexicographic ordering on the records using this type of schema
-	int GetSortOrder (OrderMaker &order);
+	int GetSortOrder(OrderMaker &order);
 
-	~Schema ();
+	void updateName(string alias);
+	void Print();
 
+	~Schema();
+
+    Schema(Schema *baseSchema, NameList *nameList, vector<int> *keepMeVector);
 };
 
 #endif

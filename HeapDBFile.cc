@@ -9,7 +9,7 @@ int HeapDBFile::Create(const char *f_path, fType file_type, void *startup) {
     file.Open(0, f_path);   // passing 0 as the first argument to create a new file at the given path
     //writeIsDirty = 0;
     endOfFile = 1;
-    cout << "file created successfully";
+    cout << "file created successfully : " << f_path << '\n';
     return 1;
 }
 
@@ -58,6 +58,16 @@ int HeapDBFile::Close() {
     return file.Close();
 }
 
+int HeapDBFile::Close1() {
+    if(page.getCurSizeInBytes()>0) {
+        file.AddPage(&page, pageOffset++);
+        page.EmptyItOut();
+    }
+    pageOffset = 0;         //resetting the page offset to start
+    endOfFile = 1;
+    return file.Close();
+}
+
 int HeapDBFile::Load(Schema &f_schema, char *loadpath) {
     FILE *fd = fopen(loadpath, "r");    // opens the file and returns the file descriptor
     if (fd == NULL) {
@@ -89,12 +99,16 @@ int HeapDBFile::Load(Schema &f_schema, char *loadpath) {
 
 void HeapDBFile::Add(Record &addMe) {
     if (page.Append(&addMe) == 0) {
+        file.AddPage(&page, pageOffset++);
         page.EmptyItOut();
         page.Append(&addMe);
     }
-    return;
 }
 
 void HeapDBFile::MoveFirst() {
     pageOffset = 0;
+}
+
+int HeapDBFile::GetLength(){
+    return file.GetLength();
 }

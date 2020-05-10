@@ -15,7 +15,7 @@ private:
 
 	int totSpace;
 
-	int done;
+
 
 	// mutex for the pipe
 	pthread_mutex_t pipeMutex;
@@ -28,6 +28,7 @@ public:
 
 	// this sets up the pipeline; the parameter is the number of
 	// records to buffer
+	int done;
 	Pipe (int bufferSize);	
 	virtual ~Pipe();
     int firstSlot;

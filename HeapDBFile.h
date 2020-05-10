@@ -12,7 +12,10 @@ class HeapDBFile : public virtual GenericDBFile {
 
 public:
 
-    HeapDBFile() {}
+    HeapDBFile() {
+        pageOffset = 0;
+        isBeingRead = false;
+    }
 
     ~HeapDBFile() {}
 
@@ -31,6 +34,10 @@ public:
     int GetNext(Record &fetchme);
 
     int GetNext(Record &fetchme, CNF &cnf, Record &literal);
+
+    int GetLength();
+
+    int Close1();
 
 };
 

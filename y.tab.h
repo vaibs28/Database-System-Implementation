@@ -39,37 +39,82 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     OR = 258,
-     AND = 259,
-     Name = 260,
+     Name = 258,
+     Float = 259,
+     Int = 260,
      String = 261,
-     Float = 262,
-     Int = 263
+     SELECT = 262,
+     GROUP = 263,
+     DISTINCT = 264,
+     BY = 265,
+     FROM = 266,
+     WHERE = 267,
+     SUM = 268,
+     AS = 269,
+     AND = 270,
+     OR = 271,
+     CREATE = 272,
+     TABLE = 273,
+     HEAP = 274,
+     INSERT = 275,
+     INTO = 276,
+     SET = 277,
+     OUTPUT = 278,
+     DROP = 279,
+     SORTED = 280,
+     ON = 281,
+     quit = 282
    };
 #endif
 /* Tokens.  */
-#define OR 258
-#define AND 259
-#define Name 260
+#define Name 258
+#define Float 259
+#define Int 260
 #define String 261
-#define Float 262
-#define Int 263
+#define SELECT 262
+#define GROUP 263
+#define DISTINCT 264
+#define BY 265
+#define FROM 266
+#define WHERE 267
+#define SUM 268
+#define AS 269
+#define AND 270
+#define OR 271
+#define CREATE 272
+#define TABLE 273
+#define HEAP 274
+#define INSERT 275
+#define INTO 276
+#define SET 277
+#define OUTPUT 278
+#define DROP 279
+#define SORTED 280
+#define ON 281
+#define quit 282
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 20 "Parser.y"
+#line 33 "Parser.y"
 {
- 	struct Operand *myOperand;
-	struct ComparisonOp *myComparison; 
-  	struct OrList *myOrList;
-  	struct AndList *myAndList;
+ 	struct FuncOperand *myOperand;
+	struct FuncOperator *myOperator;
+	struct TableList *myTables;
+	struct ComparisonOp *myComparison;
+	struct Operand *myBoolOperand;
+	struct OrList *myOrList;
+	struct AndList *myAndList;
+	struct NameList *myNames;
+	struct AttrList *myAttrList;
+	struct NameList *mysortattrs;
 	char *actualChars;
+	char whichOne;
 }
 /* Line 1529 of yacc.c.  */
-#line 73 "y.tab.h"
+#line 118 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

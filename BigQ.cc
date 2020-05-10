@@ -1,177 +1,167 @@
 #include "BigQ.h"
-#include <cstdlib>
-#include "CustomComparator.h"
-#include "CustomComparator2.h"
-
-using namespace std;
-
-vector<Record *> recordArray; //list of  pointer to a Record
-vector<Page *> pageArray;     //list of pointer to a Page
-map<int, Page *> overflow;
-
-BigQ::BigQ(Pipe &in, Pipe &out, OrderMaker &sortorder, int runlen) {
-    //will be called from the main thread itself, not creating another thread
-    int pageCount = 0;                          // using to keep track of the number of pages, max could be runlen
+void *runBigQ(void *arg) {
+    File f;
     char temp_file[100];
     sprintf(temp_file, "temp%d.bin", rand());
-    f.Open(0, temp_file);                //Tempfile for maintaining sorted run
-    currentPage = new Page();
+    f.Open(0, temp_file);  //Tempfile for maintaining sorted run
+    bigq_util *bigQ = (bigq_util *) arg;
+    Page currentPage;
+    off_t pageIndex = 0;
+    Record temp, *rec;
+    Record *newrec;
+    int counter = 0;
+    int popped = 0;
+    int pushed = 0;
+    static int bufferCount;
+    PQ pq(ComparePQ(bigQ->order));
+    CompareTwoRecords recCompare(bigQ->order);
+    currentPage.EmptyItOut();
+    vector<Record *> recArr;
+    //get the size of each run
+    int runSize = bigQ->runlen * PAGE_SIZE;
+    int curSizeInBytes = sizeof(int);
+    int recSize = 0;
+    vector<int> pageIndexArr;
+    int runCount = 0;
+    Pipe *in = bigQ->inPipe;
+    //while input pipe has records
+    while (in->Remove(&temp)) {
+        //recSize = (&temp)->GetSize();
+        newrec = new Record;
+        newrec->Consume(&temp);
 
-    while (true) {  // keep reading from the input buffer until it is empty
-        if (in.Remove(&rec) && pageCount < runlen) {    //if buffer has records and pageCount less than runlen, append records to Page
-            if (!currentPage->Append(&rec)) {
-                pageArray.push_back(currentPage); // push to pageArray since the current page is full.
-                currentPage = new Page();         // create new Page instance
-                currentPage->Append(&rec);        // append record
-                pageCount++;                      // increment pageCount by 1
-            }
+        if (runCount <= bigQ->runlen) {
+            //push to record vector
+            recArr.push_back(newrec);
+            pushed++;
+            curSizeInBytes += recSize;
         } else {
-            //input buffer is empty, so sort the records in the pages
-            if (pageCount < runlen && currentPage->getRecordCount()) {
-                pageArray.push_back(currentPage);    // if the last page has records, add it to the pageArray
+            // completed one run with runlen pages
+            runCount++;
+            pageIndexArr.push_back(pageIndex);
+            //sort record array
+            sort(recArr.begin(), recArr.end(), recCompare);
+            //write to file
+            //writeRunsToFile();
+
+            for (int i = 0; i < recArr.size(); i++) {
+                rec = recArr.at(i);
+                if (currentPage.Append(rec) == 0) {
+                    //page full, so add the page to file, empty it and write the record
+                    f.AddPage(&currentPage, pageIndex++);
+                    currentPage.EmptyItOut();
+                    currentPage.Append(rec);
+                }
+                delete rec;
             }
-
-            //sort all the records of pages to generate runs
-            generateRuns(sortorder);    // stored in recordArray
-
-            //Writing each run into file instance
-            writeRunsToFile(runlen);
-
-            //Appending the record of next-run into buffer page, and setting run-page pageCount to 0
-            if (pageCount >= runlen) {
-                currentPage->Append(&rec);
-                pageCount = 0;
-                continue;
-            } else {
-                break;
+            recArr.clear();
+            //write last page if it has records
+            if (currentPage.getCurSizeInBytes() > 0) {
+                f.AddPage(&currentPage, pageIndex++);
+                currentPage.EmptyItOut();
             }
+            recArr.push_back(newrec);
+
+            curSizeInBytes = sizeof(int) + recSize;
         }
-    } // while loop ends
+    }
+    //sort the records of last page
+    vector<Record*>::iterator iter1 = recArr.begin();
+    vector<Record*>::iterator iter2 = recArr.end();
 
-
-    //start run merge
-    off_t fileLength = f.GetLength();
-    off_t numRuns = 0;
-    if (fileLength != 0)
-        numRuns = ((ceil)((float) (fileLength - 1) / runlen));
-    else numRuns = 0;
-    off_t last_run_pages = (fileLength - 1) - (numRuns - 1) * runlen;
-
-    priority_queue<Record *, vector<Record *>, CustomComparator2> pq(&sortorder);
-
-    //Maps Record to run (for k-way merge)
-    map<Record *, int> m_record;
-
-    //Maintains page numbers of each run
-    int *page_index = new int[numRuns];
-
-    //Maintains current buffer page in each run
-    Page **page_array = new Page *[numRuns];
-
-    //Load first pages into the memory buffer and first record into priority queue
-    int page_num = 0;
-
-    for (int i = 0; i < numRuns; i++) {
-        page_array[i] = new Page();
-        f.GetPage(page_array[i], page_num);
-        page_index[i] = 1;
-        Record *r = new Record;
-        page_array[i]->GetFirst(r);
-        pq.push(r);
-        m_record[r] = i;
-        r = NULL;
-        page_num += runlen;
+    sort(recArr.begin(), recArr.end(), recCompare);
+    //write to the vector
+    pageIndexArr.push_back(pageIndex);
+    for (int i = 0; i < recArr.size(); i++) {
+        rec = recArr.at(i);
+        if (currentPage.Append(rec) == 0) {
+            f.AddPage(&currentPage, pageIndex++);
+            currentPage.EmptyItOut();
+            currentPage.Append(rec);
+        }
+        delete rec;
+    }
+    recArr.clear();
+    if (currentPage.getCurSizeInBytes() > 0) {
+        f.AddPage(&currentPage, pageIndex++);
+        currentPage.EmptyItOut();
     }
 
-    //Extract from priority queue and place on the output pipe
+    //merge phase
+    pageIndexArr.push_back(pageIndex);
+    int numOfRuns = pageIndexArr.size() - 1;
+    Run *runs[numOfRuns];
+    for (int i = 0; i < numOfRuns; i++) {
+        Record *tmprec = new Record;
+        runs[i] = new Run(&f, pageIndexArr[i], pageIndexArr[i + 1]);
+        runs[i]->GetNext(tmprec);
+        RunRecord *runRecord = new RunRecord(tmprec, runs[i]);
+        pq.push(runRecord);
+    }
+    RunRecord *popPQ;
+    Record *popRec;
+    Run *popRun;
     while (!pq.empty()) {
-
-        Record *r = pq.top(); //Extract the min priority record
+        popPQ = pq.top();
         pq.pop();
-
-        //run number of record being pushed, -1 sentinel
-        int next_rec_run = -1;
-
-        next_rec_run = m_record[r];
-        m_record.erase(r);
-
-        if (next_rec_run == -1)
-            return;
-
-
-        Record *next = new Record;
-        bool is_rec_found = true;
-        if (!page_array[next_rec_run]->GetFirst(next)) {
-            //Check if not the end of run
-            if ((!(next_rec_run == (numRuns - 1)) && page_index[next_rec_run] < runlen)
-                || ((next_rec_run == (numRuns - 1) && page_index[next_rec_run] < last_run_pages))) {
-
-                f.GetPage(page_array[next_rec_run], page_index[next_rec_run] + next_rec_run * runlen);
-                page_array[next_rec_run]->GetFirst(next);
-                page_index[next_rec_run]++;
-            } else {  //Check for overflow page incase of last run
-                if (page_index[next_rec_run] == runlen) {
-                    if (overflow[(next_rec_run + 1) * runlen - 1]) {
-                        delete page_array[next_rec_run];
-                        page_array[next_rec_run] = NULL;
-                        page_array[next_rec_run] = (overflow[(next_rec_run + 1) * runlen - 1]);
-                        overflow[(next_rec_run + 1) * runlen - 1] = NULL;
-                        page_array[next_rec_run]->GetFirst(next);
-                    } else is_rec_found = false;
-                } else is_rec_found = false;
-            }
+        popRun = popPQ->run;
+        popRec = popPQ->record;
+        bigQ->outPipe->Insert(popRec);
+        delete popRec;
+        Record *nextRecord = new Record;
+        if (popRun->GetNext(nextRecord) == 1) {
+            popPQ->record = nextRecord;
+            pq.push(popPQ);
+        } else {
+            delete popRun;
+            delete popPQ;
+            delete nextRecord;
         }
-        //Push the next record into the priority queue if found
-        if (is_rec_found) {
-            pq.push(next);
-        }
-        m_record[next] = next_rec_run;
-        out.Insert(r);
     }
+    bigQ->outPipe->ShutDown();
     f.Close();
-    out.ShutDown();
+    remove(temp_file);
 }
 
-BigQ::~BigQ() {}
 
-int BigQ::generateRuns(OrderMaker &sortorder) {
-    for (int i = 0; i < pageArray.size(); i++) {
-        Record *temp = new Record();
-        while (pageArray[i]->GetFirst(temp)) {
-            recordArray.push_back(temp);
-            temp = new Record();
-        }
-        delete temp;
-        delete pageArray[i];
-        pageArray[i] = NULL;
-        temp = NULL;
-    }
-    //internal sort all the records using stdlib
-    std::sort(recordArray.begin(), recordArray.end(), CustomComparator(&sortorder));
+BigQ::BigQ(Pipe &in, Pipe &out, OrderMaker &sortorder, int runlen) {
+    pthread_t myThread;
+    //create and init the struct
+    bigq_util *bq = new bigq_util;
+    bq->order = &sortorder;
+    bq->runlen = runlen;
+    bq->outPipe = &out;
+    bq->inPipe = &in;
+
+    //create and start the thread
+    pthread_create(&myThread, NULL, runBigQ, bq);
+    //pthread_join(myThread,NULL);
+    //sout.ShutDown();
 }
 
-void BigQ::writeRunsToFile(int runlen){
-    int pageIndex = 0;
-    Page *runPage = new Page();
-    int pageCount1 = 0;
-    for (int i = 0; i < recordArray.size(); i++) {  //traverse through all the records and put them in pages and then into file
-        if (!runPage->Append(recordArray[i])) {     //page is full
-            pageIndex++;                            //increment the index
-            f.AddPage(runPage, pageCount1++);       //add to file
-            runPage->EmptyItOut();                  //clear the page
-            runPage->Append(recordArray[i]);        //add the next record as first in the empty page
-        }
-        delete recordArray[i];
-    }
+BigQ::~BigQ() {
+}
 
-    if (pageIndex < runlen) {
-        if (runPage->getRecordCount())
-            f.AddPage(runPage, pageCount1++);
-    } else { //Check for overflow page and map the run number to it
-        if (runPage->getRecordCount()) {
-            overflow[pageCount1 - 1] = runPage;
-        }
-    }
-    recordArray.clear();
-    pageArray.clear();
+ComparePQ::ComparePQ(OrderMaker *order) {
+    this->order = order;
+}
+
+bool ComparePQ::operator()(RunRecord *left, RunRecord *right) const {
+    ComparisonEngine ce;
+    if (ce.Compare(left->record, right->record, order) >= 0)
+        return true;
+    else
+        return false;
+}
+
+CompareTwoRecords::CompareTwoRecords(OrderMaker *order) {
+    this->order = order;
+}
+
+bool CompareTwoRecords::operator()(Record *left, Record *right) const {
+    ComparisonEngine ce;
+    if (ce.Compare(left, right, order) < 0)
+        return true;
+    else
+        return false;
 }

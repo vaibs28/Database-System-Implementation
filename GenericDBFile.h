@@ -50,6 +50,8 @@ public:
     virtual int GetNext(Record &fetchme) = 0;
 
     virtual int GetNext(Record &fetchme, CNF &cnf, Record &literal) = 0;
+
+    int GetLength();
 };
 
 #endif //A2TEST_GENERICDBFILE_H
